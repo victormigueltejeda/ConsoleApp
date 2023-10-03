@@ -1,4 +1,3 @@
-import colors from 'colors';
 import inquirer  from 'inquirer';
 
 
@@ -93,7 +92,6 @@ const leerInput= async (message) => {
         if(value.length === 0){
           return "Por favor ingrese un valor"
         }
-
         return true;
       }
     }
@@ -105,5 +103,42 @@ const leerInput= async (message) => {
 }
 
 
+const listadoTareasBorrar = async (tareas = []) => {
 
-export  { inquireMenu,pausa,leerInput }
+  const choices = tareas.map((tarea,i) => {
+
+    const idx = `${i + 1}`
+
+
+    return{
+      value:tarea.id,
+      name:`${idx} ${tarea.desc}`
+    }
+  })
+
+
+  const preguntas = [
+
+    {
+      type:"list",
+      name:"id",
+      message:"Borrar",
+      choices
+    }
+  ]
+  const {id} = await inquirer.prompt(preguntas);
+  return id;
+
+}
+
+
+const confirmar = (message) => {
+
+  const question = [
+
+  ]
+}
+
+
+
+export  { inquireMenu,pausa,leerInput ,listadoTareasBorrar}

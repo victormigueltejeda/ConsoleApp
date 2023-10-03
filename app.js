@@ -1,4 +1,4 @@
-import { inquireMenu,pausa ,leerInput} from "./helpers/inquirer.js"
+import { inquireMenu,pausa ,leerInput,listadoTareasBorrar} from "./helpers/inquirer.js"
 import { Tareas } from './models/tareas.js';
 import  {guardarDB,leerDB}  from "./helpers/guardarArchivo.js";
 
@@ -11,7 +11,9 @@ const main = async() => {
 
   if(tareasDB) {
     //List the Task
+    tareas.cargarTareasFromArray(tareasDB)
   }
+
 
 
   do{
@@ -26,11 +28,27 @@ const main = async() => {
 
     case "2":
       //List Option
-      console.log(tareas.listadoArr)
+      tareas.listadoCompleto()
+    break;
+
+    case "3":
+      //List complet
+      tareas.listarPendientesCompletadas()
+    break;
+
+    case "4":
+      //List pendint
+      tareas.listarPendientesCompletadas(false)
+    break;
+
+    case "6":
+      //Task Delete
+      const id = await listadoTareasBorrar(tareas.listadoArr)
+      console.log({id})
     break;
    }
 
-   //guardarDB(tareas.listadoArr)
+   guardarDB(tareas.listadoArr)
    await pausa()
 
   }while(opt !== "0")
