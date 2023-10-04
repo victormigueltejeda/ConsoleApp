@@ -1,4 +1,4 @@
-import { inquireMenu,pausa ,leerInput,listadoTareasBorrar} from "./helpers/inquirer.js"
+import { inquireMenu,pausa ,leerInput,listadoTareasBorrar,confirmar,mostrarListadoCheckList} from "./helpers/inquirer.js"
 import { Tareas } from './models/tareas.js';
 import  {guardarDB,leerDB}  from "./helpers/guardarArchivo.js";
 
@@ -41,15 +41,32 @@ const main = async() => {
       tareas.listarPendientesCompletadas(false)
     break;
 
+    case "5":
+      //completado pendiente
+     const ids = await mostrarListadoCheckList(tareas.listadoArr)
+     tareas.toggleCompletadas(ids)
+     console.log(ids)
+    break;
+
+
     case "6":
       //Task Delete
       const id = await listadoTareasBorrar(tareas.listadoArr)
-      console.log({id})
+
+      if(id !== "0"){
+        const ok = await confirmar("Esta Seguro?");
+
+        if(ok){
+          tareas.borrarTarea(id)
+          console.log("Tarea Borrada")
+        }
+        
+      }
     break;
    }
 
-   guardarDB(tareas.listadoArr)
-   await pausa()
+  guardarDB(tareas.listadoArr)
+  await pausa()
 
   }while(opt !== "0")
 

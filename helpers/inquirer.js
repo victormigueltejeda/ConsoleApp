@@ -1,4 +1,5 @@
 import inquirer  from 'inquirer';
+import colors from "colors"
 
 
 const preguntas = [
@@ -73,10 +74,7 @@ const pausa = async() => {
       message:`Presione ${'enter'.green} para continuar`,
     }
   ]
-
-
   console.log("\n")
-  
   await inquirer.prompt(questionStop)
 
 }
@@ -117,6 +115,12 @@ const listadoTareasBorrar = async (tareas = []) => {
   })
 
 
+  choices.unshift({
+    value:"0",
+    name:"0. ".green + "Cancelar"
+  })
+
+
   const preguntas = [
 
     {
@@ -132,13 +136,48 @@ const listadoTareasBorrar = async (tareas = []) => {
 }
 
 
-const confirmar = (message) => {
+const confirmar = async (message) => {
 
   const question = [
-
+    {
+      type:"confirm",
+      name:"ok",
+      message
+    }
   ]
+  const {ok} = await inquirer.prompt(question)
+  return ok;
+}
+
+const mostrarListadoCheckList = async (tareas = []) => {
+
+  const choices = tareas.map((tarea,i) => {
+
+    const idx = `${i + 1}`
+
+
+    return{
+      value:tarea.id,
+      name:`${idx} ${tarea.desc}`,
+      checked:(tarea.completadoEn) ? true : false
+    }
+  })
+
+
+  const pregunta = [
+
+    {
+      type:"checkbox",
+      name:"ids",
+      message:"Selecciones",
+      choices
+    }
+  ]
+  const {ids} = await inquirer.prompt(pregunta);
+  return ids;
+
 }
 
 
 
-export  { inquireMenu,pausa,leerInput ,listadoTareasBorrar}
+export  { inquireMenu,pausa,leerInput ,listadoTareasBorrar,confirmar,mostrarListadoCheckList}
